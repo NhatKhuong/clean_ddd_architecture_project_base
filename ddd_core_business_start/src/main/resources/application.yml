@@ -1,0 +1,79 @@
+server:
+  port: 1122
+  tomcat:
+    threads:
+      max: 10
+
+spring:
+#  main:
+#    lazy-initialization: true
+  application:
+    name: com.example
+  #DBS
+  datasource:
+    hikari:
+      maximum-pool-size: 10  # Số lượng tối đa kết nối
+      minimum-idle: 5        # Số lượng kết nối tối thiểu trong pool
+    url: jdbc:mysql://localhost:3316/vattunongnghiep
+    username: root
+    password: root1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    type: com.zaxxer.hikari.HikariDataSource
+
+  jpa:
+    database: mysql
+    show-sql: true
+    hibernate:
+      ddl-auto: update  # Không tự động tạo/ cập nhật bảng thay vì update
+      properties:
+        hibernate:
+          format_sql: true
+          use_sql_comments: true
+  jackson:
+    serialization:
+      indent-output: true
+
+resilience4j:
+  circuitbreaker:
+    instances:
+      checkRandom:
+        # Bật để rate limiter được đưa vào health check của Spring Boot Actuator.
+        registerHealthIndicator: true
+        #        Kích thước cửa sổ quan sát lỗi/thành công gần đây.
+        slidingWindowSize: 4
+        #        Khi circuit breaker đang ở trạng thái HALF_OPEN, nó chỉ cho phép 3 request thử đi qua.
+        permittedNumberOfCallsInHalfOpenState: 2
+        #        slidingWindowType: TIME_BASED
+        #        Circuit Breaker chỉ bắt đầu tính tỷ lệ lỗi sau khi có ít nhất 20 cuộc gọi trong cửa sổ quan sát.
+        minimumNumberOfCalls: 5
+        #        Khi đang ở trạng thái OPEN, circuit breaker sẽ chặn request trong 50 giây.
+        waitDurationInOpenState: 30s
+        #        Nếu tỷ lệ request lỗi trong cửa sổ quan sát đạt 50% hoặc hơn, circuit breaker sẽ chuyển sang trạng thái OPEN.
+        failureRateThreshold: 50
+        eventConsumerBufferSize: 10
+  ratelimiter:
+    instances:
+      backendA:
+        limitForPeriod: 2
+        limitRefreshPeriod: 10s
+        timeoutDuration: 0
+        # Bật để rate limiter được đưa vào health check của Spring Boot Actuator.
+        registerHealthIndicator: true
+        eventConsumerBufferSize: 100
+      backendB:
+        limitForPeriod: 2
+        limitRefreshPeriod: 5s
+        timeoutDuration: 0
+
+management:
+  health:
+    circuitbreakers:
+      enabled: true
+  endpoints:
+    web:
+      exposure:
+        include:
+          - '*'
+  endpoint:
+    health:
+      show-details: always
