@@ -1,25 +1,31 @@
 package com.example.api;
 
-import com.example.application.command.CreateProductCommand;
-import com.example.application.dto.ProductResultDto;
-import com.example.application.usecase.CreateProductUseCase;
-import com.example.application.usecase.FindProductByIdUseCase;
+import com.example.application.command.product.CreateProductCommand;
+import com.example.application.dto.product.ProductResultDto;
+import com.example.application.service.product.CreateProductUseCase;
+import com.example.application.service.product.FindProductByIdUseCase;
 import com.example.mapper.ProductControllerMapper;
 import com.example.request.CreateProductRequest;
 import com.example.response.ProductResponse;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/product")
 public class ProductController {
-    @Autowired
-    private ProductControllerMapper productControllerMapper;
-    @Autowired
-    private CreateProductUseCase createProductUseCase;
-    @Autowired
-    private FindProductByIdUseCase findProductByIdUseCase;
+
+
+    private final ProductControllerMapper productControllerMapper;
+    private final CreateProductUseCase createProductUseCase;
+    private final FindProductByIdUseCase findProductByIdUseCase;
+
+    public ProductController(ProductControllerMapper productControllerMapper,
+                             CreateProductUseCase createProductUseCase,
+                             FindProductByIdUseCase findProductByIdUseCase) {
+        this.productControllerMapper = productControllerMapper;
+        this.createProductUseCase = createProductUseCase;
+        this.findProductByIdUseCase = findProductByIdUseCase;
+    }
 
     @PostMapping("/create")
     public ProductResponse create(@RequestBody CreateProductRequest request) {

@@ -1,8 +1,8 @@
 package com.example.mapper;
 
 
-import com.example.application.command.CreateProductCommand;
-import com.example.application.dto.ProductResultDto;
+import com.example.application.command.product.CreateProductCommand;
+import com.example.application.dto.product.ProductResultDto;
 import com.example.request.CreateProductRequest;
 import com.example.response.ProductResponse;
 import org.springframework.stereotype.Component;

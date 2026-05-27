@@ -13,8 +13,12 @@ import java.util.List;
 import java.util.Optional;
 @Service
 public class ProductRepositoryImpl implements ProductRepository {
-    @Autowired
-    private ProductSpringDataRepository productSpringDataRepository;
+    private final ProductSpringDataRepository productSpringDataRepository;
+
+    public ProductRepositoryImpl(ProductSpringDataRepository productSpringDataRepository) {
+        this.productSpringDataRepository = productSpringDataRepository;
+    }
+
     @Override
     public Product save(Product product) {
         ProductJPAEntity entity = toEntity(product);

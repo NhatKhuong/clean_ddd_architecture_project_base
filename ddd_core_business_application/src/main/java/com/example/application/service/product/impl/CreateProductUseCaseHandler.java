@@ -1,19 +1,20 @@
-package com.example.application.service;
+package com.example.application.service.product.impl;
 
-import com.example.application.command.CreateProductCommand;
-import com.example.application.dto.ProductResultDto;
-import com.example.application.usecase.CreateProductUseCase;
+import com.example.application.command.product.CreateProductCommand;
+import com.example.application.dto.product.ProductResultDto;
+import com.example.application.service.product.CreateProductUseCase;
 import com.example.domain.aggregate.Product;
 import com.example.domain.repository.ProductRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.UUID;
-
 @Service
-public class CreateProductService implements CreateProductUseCase {
-    @Autowired
-    private ProductRepository productRepository;
+public class CreateProductUseCaseHandler implements CreateProductUseCase {
+    private final ProductRepository productRepository;
+
+    public CreateProductUseCaseHandler(ProductRepository productRepository) {
+        this.productRepository = productRepository;
+    }
+
     @Override
     public ProductResultDto execute(CreateProductCommand command) {
         Product product = Product.builder()
